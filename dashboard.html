@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Node.js Application Interaction</title>
+</head>
+
+<body>
+	<h1>Node.js Application Interaction</h1>
+
+	<!-- Button to fetch magazine log data -->
+	<button id="fetchMagazineButton">Fetch Magazine Data</button>
+
+	<!-- Display fetched data here -->
+	<div id="dataDisplay"></div>
+
+	<div id="jsonToHtmlTable"></div>
+	<script>
+		function fetchMagazines() {
+			fetch('http://localhost:3030/magazine')
+				.then(response => response.json())
+				.then(data => {
+					const jsonToHtmlTableElement = jsonToHtmlTable(data);
+					document.getElementById('jsonToHtmlTable').innerHTML="";
+					document.getElementById('jsonToHtmlTable').appendChild(jsonToHtmlTableElement);
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		}
+
+		function DeleteMagazine(id) {
+			fetch('http://localhost:3030/magazine/delete/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+				.then(response => response.json())
+				.then(data => {
+					fetchMagazines();
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		}
+		function UpdateStatusMagazine(id) {
+			fetch('http://localhost:3030/magazine/delete/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+				.then(response => response.json())
+				.then(data => {
+					fetchMagazines();
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		}
+		
+
+
+		// Function to convert JSON data to an HTML table with buttons for delete and change status
+		function jsonToHtmlTable(data) {
+			const table = document.createElement('table');
+			table.border = '1';
+
+			// Create table headers, including new headers for delete and change status buttons
+			const headers = [...Object.keys(data.data[0]), 'Actions'];
+			const headerRow = document.createElement('tr');
+			headers.forEach(headerText => {
+				const th = document.createElement('th');
+				th.textContent = headerText;
+				headerRow.appendChild(th);
+			});
+			table.appendChild(headerRow);
+
+			// Create table rows with buttons
+			data.data.forEach(item => {
+				const row = document.createElement('tr');
+				headers.forEach(header => {
+					const cell = document.createElement('td');
+					if (header === 'Actions') {
+						// Create buttons for delete and change status
+						const Edit = document.createElement('button');
+						deleteButton.textContent = 'Edit';
+						deleteButton.addEventListener('click', () => {
+							OpenPopUp(item);
+						});
+						const deleteButton = document.createElement('button');
+						deleteButton.textContent = 'Delete';
+						deleteButton.addEventListener('click', () => {
+							DeleteMagazine(item.id);
+						});
+
+						const changeStatusButton = document.createElement('button');
+						changeStatusButton.textContent = item.is_subscribed? 'Unsubscribe':'Subscribe';
+						changeStatusButton.addEventListener('click', () => {
+							UpdateStatusMagazine(item.id);
+						});
+
+						cell.appendChild(deleteButton);
+						cell.appendChild(changeStatusButton);
+					} else {
+						cell.textContent = item[header];
+					}
+					row.appendChild(cell);
+				});
+				table.appendChild(row);
+			});
+
+			return table;
+		}
+
+		// Attach click event listener to the button
+		document.getElementById('fetchMagazineButton').addEventListener('click', fetchMagazines);
+	</script>
+</body>
+
+</html>
