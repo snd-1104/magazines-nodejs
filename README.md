@@ -110,3 +110,41 @@ Example Request Body:
 - **HTTP Method**: DELETE
 - **Description**: Delete a specific magazine by its ID.
 - **Response**: JSON indicating success or error.
+
+
+
+## Magazine Log Management API Documentation
+
+This API provides functionality for managing magazine log entries, including listing log entries and adding new log entries. It allows you to retrieve log details and perform actions related to magazine subscriptions.
+
+### Table of Contents
+
+1. [List Magazine Log Entries](#1-list-magazine-log-entries)
+2. [Add Magazine Log Entry](#2-add-magazine-log-entry)
+
+---
+
+### 1. List Magazine Log Entries
+
+- **Endpoint**: `/magazine-log`
+- **HTTP Method**: GET
+- **Description**: Get a list of magazine log entries, including details such as magazine ID, magazine title, log date, and action status.
+- **Response**: JSON containing an array of magazine log objects.
+
+---
+
+### 2. Add Magazine Log Entry
+
+- **Endpoint**: `/magazine-log`
+- **HTTP Method**: POST
+- **Description**: Add a new magazine log entry to the system.
+- **Request Body**: JSON object containing magazine log details.
+- **Response**: JSON indicating success or error.
+
+Example Request Body:
+```json
+{
+  "magazine_id": 1,
+  "log_date": "2023-10-01T14:30:00Z",
+  "action_status": "Subscribed"
+}
