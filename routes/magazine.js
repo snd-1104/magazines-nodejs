@@ -33,6 +33,8 @@ exports.list = function (req, res) {
 };
 exports.add = function (req, res) {
 	// Check if a magazine with the same title already exists
+	// console.log(req.body);
+	// return false;
 	if (!req.body.title || req.body.title == "" || req.body.title.trim() == "") {
 		res.status(400).json({
 			status: "error",
@@ -48,9 +50,13 @@ exports.add = function (req, res) {
 	}
 	else {
 		models.magazines.findOne({
-			where: {
-				title: req.body.title
-			}
+			where: models.Sequelize.and(
+				models.Sequelize.or(
+					{ is_deleted: false },
+					{ is_deleted: null }
+				),
+				{ title: req.body.title }
+			),
 		}).then(function (existingMagazine) {
 			if (existingMagazine) {
 				// A magazine with the same title already exists
@@ -64,8 +70,8 @@ exports.add = function (req, res) {
 					title: req.body.title,
 					description: req.body.description,
 					monthly_price: req.body.monthly_price,
-					is_subscribed: req.body.is_subscribed,
-					is_deleted: req.body.is_deleted,
+					is_subscribed: false,
+					is_deleted:false,
 				};
 				models.magazines.create(data).then(function (newMagazine) {
 					res.json({
@@ -129,8 +135,8 @@ exports.update = function (req, res) {
 					title: req.body.title ?? existingMagazine.title,
 					description: req.body.description ?? existingMagazine.description,
 					monthly_price: req.body.monthly_price ?? existingMagazine.monthly_price,
-					is_subscribed: req.body.is_subscribed ?? existingMagazine.is_subscribed,
-					is_deleted: req.body.title ?? existingMagazine.is_deleted,
+					is_subscribed: req.body.is_subscribed ,
+					is_deleted: req.body.is_deleted,
 				};
 				models.magazines.update(data, {
 					where: {

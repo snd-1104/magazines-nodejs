@@ -42,18 +42,21 @@ exports.list = function (req, res) {
 };
 
 exports.add = function (req, res) {
-	if (!req.body.magazine_id || req.body.magazine_id == "" || req.body.magazine_id.trim() == "" || isNaN(parseInt(req.body.magazine_id)) || parseInt(req.body.magazine_id) == 0) {
-		res.status(400).json({
-			status: "error",
-			message: "There was an error getting the magazine ID",
-		});
-	}
+	
+	// if (!req.body.magazine_id || req.body.magazine_id == "" || req.body.magazine_id.trim() == "" || isNaN(parseInt(req.body.magazine_id)) || parseInt(req.body.magazine_id) == 0) {
+	// 	res.status(400).json({
+	// 		status: "error",
+	// 		message: "There was an error getting the magazine ID",
+	// 	});
+	// }
 	models.magazines.findOne({
 		where: {
 			id: req.body.magazine_id
 		}
 	}).then(function (existingMagazine) {
+		
 		if (existingMagazine) {
+			
 			// The magazine exists => add the log
 			var data = {
 				magazine_id: req.body.magazine_id,

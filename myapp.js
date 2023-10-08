@@ -29,7 +29,7 @@ app.get('/magazine', magazine.list);
 app.get('/magazine/:id', magazine.detail);
 app.post('/magazine', magazine.add);
 app.put('/magazine/delete/:id', magazine.delete);
-app.put('/magazine/:id', magazine.edit);
+app.put('/magazine/:id', magazine.update);
 
 app.get('/magazine_log', magazine_log.list);
 app.post('/magazine_log', magazine_log.add);

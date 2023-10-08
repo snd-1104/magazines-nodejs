@@ -1,127 +1,112 @@
-# NodeJS Simple CRUD API with MySQL
-Example of NodeJS CRUD (Create Read Update Delete) API with MySQL database, it has category and product table.
+# Magazine Subscription Management System
+
+## Overview
+
+The Magazine Subscription Management System is a Node.js project that allows users to manage magazine subscriptions and view their subscription history. The system consists of two primary components: "magazines" and "magazines_log." Users can perform various actions within the system:
+
 
 ## Installation Steps
 1. Clone this repository or download .zip file.
 2. Create new database on your MySQL Server.
 3. Import `digital_magazines.sql`
 4. Install node module by run ``npm install`` on your console.
-5. Edit database configuration in file `./config/config.json`
-6. Execute ``node myapp.js`` to run this app.
-7. When this app is running you can try to use this API.
+7. Execute ``npm run start`` to run this app. It will run on port 3030.
+8. When this app is running you can navigate to this link to test the APIs http://localhost/your_project_directory/dashboard.html.
 
-## Run API Test
-1. Execute ``node myapp.js`` to run this app.
-2. Execute ``jasmine-node ./test/`` to start testing.
 
-## API Documentation
 
-## Category
+## Features
 
-#### List All Category [GET /category]
-List all category with hierarchical tree data.
+### Add Magazines
 
-+ Response 200 (application/json)
+Users can add new magazines to the system, providing essential details such as title, content, and subscription status.
 
-#### Add New Category [POST /category]
-Add new category
+### Delete Magazines
 
-+ Body Params
-    + name (string)
-    + description (string) _optional_
-    + parent (int) _optional_
+Magazines can be removed from the system when they are no longer needed.
 
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+### Subscribe or Unsubscribe
 
-#### Update Category [PUT /category/{id}]
-Update category data
+Users have the flexibility to subscribe to or unsubscribe from magazines, enabling them to receive or stop receiving updates.
 
-+ Parameters
-    + id (int)
+### View Subscription History
 
-+ Body Params
-    + name (string)
-    + description (string) _optional_
-    + parent (int) _optional_
+The system maintains a comprehensive log of subscription and unsubscription events in the "magazines_log." Users can access this log to view their subscription history, including when they subscribed or unsubscribed from specific magazines.
 
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+This Magazine Subscription Management System simplifies the process of managing magazine subscriptions, offering users control over their subscriptions and transparency in the subscription history. It's a user-friendly solution for efficient magazine subscription management.
 
-#### Delete Category [DELETE /category/{id}]
-Delete category
+## Magazine Subscription Management API Documentation
 
-+ Parameters
-    + id (int)
+This API provides functionality for managing magazine subscriptions, including adding, deleting, updating, and retrieving magazine details. It also offers subscription history and status management.
 
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+### Table of Contents
 
-#### Category Detail [GET /category/{id}]
-Get detail data of specified category by id with hierarchical tree data.
+1. [List Magazines](#1-list-magazines)
+2. [Add Magazine](#2-add-magazine)
+3. [Retrieve Magazine Details](#3-retrieve-magazine-details)
+4. [Update Magazine](#4-update-magazine)
+5. [Delete Magazine](#5-delete-magazine)
 
-+ Parameters
-    + id (int)
+---
 
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+### 1. List Magazines
 
-## Product
+- **Endpoint**: `/magazines`
+- **HTTP Method**: GET
+- **Description**: Get a list of magazines, including their details.
+- **Response**: JSON containing an array of magazine objects.
 
-#### List Product [GET /product]
-Get list data of products, you can pass query string `limit` to set length of data. Default value for `limit` is 10.
+---
 
-+ Query String Params
-    + limit (int) _optional_
-    + page (int) _optional_
+### 2. Add Magazine
 
-+ Response 200 (application/json)
+- **Endpoint**: `/magazines`
+- **HTTP Method**: POST
+- **Description**: Add a new magazine to the system.
+- **Request Body**: JSON object containing magazine details.
+- **Response**: JSON indicating success or error.
 
-#### Add New Product [POST /product]
-Add new product
+Example Request Body:
+```json
+{
+  "title": "Sample Magazine",
+  "description": "A sample magazine description.",
+  "monthly_price": 9.99
+}
+```
 
-+ Body Params
-    + name (string)
-    + description (string) _optional_
-    + category_id (int)
-    + stock (int)
-    + price (double)
-    + cost (double)
+---
 
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+### 3. Retrieve Magazine Details
 
-#### Update Product [PUT /product/{id}]
-Update product data
+- **Endpoint**: `/magazines/{id}`
+- **HTTP Method**: GET
+- **Description**: Retrieve details of a specific magazine by its ID.
+- **Response**: JSON containing the magazine's details.
 
-+ Parameters
-    + id (int)
+---
 
-+ Body Params
-    + name (string)
-    + description (string) _optional_
-    + category_id (int)
-    + stock (int)
-    + price (double)
-    + cost (double)
+### 4. Update Magazine
 
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+- **Endpoint**: `/magazines/{id}`
+- **HTTP Method**: PUT
+- **Description**: Update details of a specific magazine by its ID.
+- **Request Body**: JSON object containing the fields to be updated.
+- **Response**: JSON indicating success or error.
 
-#### Delete Product [DELETE /product/{id}]
-Delete product
+Example Request Body:
+```json
+{
+  "title": "Updated Magazine Title",
+  "monthly_price": 12.99
+}
+```
 
-+ Parameters
-    + id (int)
+---
 
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+### 5. Delete Magazine
 
-#### Product Detail [GET /product/{id}]
-Get detail data of specified product by id
-
-+ Parameters
-    + id (int)
-
-+ Success Response 200 (application/json)
-+ Error Response 400 (application/json)
+- **Endpoint**: `/magazines/{id}`
+- **HTTP Method**: DELETE
+- **Description**: Delete a specific magazine by its ID.
+- **Response**: JSON indicating success or error.

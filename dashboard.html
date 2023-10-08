@@ -1,122 +1,77 @@
 <!DOCTYPE html>
 <html>
+<title>
+	Magazines Subscription
+</title>
 
 <head>
-	<title>Node.js Application Interaction</title>
+	<link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./public/css/style.css">
 </head>
 
 <body>
-	<h1>Node.js Application Interaction</h1>
-
-	<!-- Button to fetch magazine log data -->
-	<button id="fetchMagazineButton">Fetch Magazine Data</button>
-
-	<!-- Display fetched data here -->
-	<div id="dataDisplay"></div>
-
-	<div id="jsonToHtmlTable"></div>
-	<script>
-		function fetchMagazines() {
-			fetch('http://localhost:3030/magazine')
-				.then(response => response.json())
-				.then(data => {
-					const jsonToHtmlTableElement = jsonToHtmlTable(data);
-					document.getElementById('jsonToHtmlTable').innerHTML="";
-					document.getElementById('jsonToHtmlTable').appendChild(jsonToHtmlTableElement);
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		}
-
-		function DeleteMagazine(id) {
-			fetch('http://localhost:3030/magazine/delete/' + id, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-				.then(response => response.json())
-				.then(data => {
-					fetchMagazines();
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		}
-		function UpdateStatusMagazine(id) {
-			fetch('http://localhost:3030/magazine/delete/' + id, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-				.then(response => response.json())
-				.then(data => {
-					fetchMagazines();
-				})
-				.catch(error => {
-					console.error(error);
-				});
-		}
-		
+	<h1 class="text-center p-3 mb-5">Magazines Subscription</h1>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-8 px-4">
+				<fieldset class="mb-4">
+					<div class="d-flex justify-content-between">
+						<legend>Magazines List</legend>
+						<div class="d-flex">
+							<a id="AddNewBtn" class="btn btn-primary d-inline-block mx-1 text-nowrap"
+								href="javascript:ShowDiv('AddNew','ShowHistory');void(0);">Add New Magazine</a>
+							<a id="ShowHistoryBtn" class="btn btn-dark d-none mx-1 text-nowrap"
+								href="javascript:ShowDiv('ShowHistory','AddNew');void(0);">View
+								Subscription History</a>
+						</div>
+					</div>
+				</fieldset>
+				<div id="jsonToHtmlTable" class="magazinesTable"></div>
+			</div>
+			<div class="col-md-4  border border-top-0 border-bottom-0 px-4">
+				<div id="ShowHistory">
+					<fieldset class="mb-4">
+						<legend>Subscription History</legend>
+					</fieldset>
+					<div id="logTable"></div>
 
 
-		// Function to convert JSON data to an HTML table with buttons for delete and change status
-		function jsonToHtmlTable(data) {
-			const table = document.createElement('table');
-			table.border = '1';
+				</div>
+				<div id="AddNew" class="d-none">
+					<form id="FormAddNew" action="http://localhost:3030/magazine" method="POST">
+						<fieldset class="mb-4">
+							<legend>Add New Magazine</legend>
+						</fieldset>
+						<div class="input-group mb-2">
+							<label for="title" class="col-md-4">Title</label>
+							<input type="text" value="" placeholder="Title *" name="title" class="form-control" required="true" />
+						</div>
+						<div class="input-group mb-2">
+							<label for="description" class="col-md-4">Description</label>
+							<input type="text" value="" placeholder="Description" name="description" class="form-control" />
+						</div>
+						<div class="input-group mb-2">
+							<label for="monthly_price" class="col-md-4">Monthly Price</label>
+							<input type="text" value="" placeholder="Monthly Price *" name="monthly_price" class="form-control"
+								required="true" />
+						</div>
+						<div class="d-flex justify-content-between">
+							<button class=" btn btn-primary mb-4">Add Magazine</button>
+							<a id="ShowHistoryBtn" class=" btn btn-outline-danger mb-4"
+								href="javascript:ShowDiv('ShowHistory','AddNew');void(0);">Cancel</a>
+						</div>
+						<div>
+							<div class="alert" id="message"></div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
-			// Create table headers, including new headers for delete and change status buttons
-			const headers = [...Object.keys(data.data[0]), 'Actions'];
-			const headerRow = document.createElement('tr');
-			headers.forEach(headerText => {
-				const th = document.createElement('th');
-				th.textContent = headerText;
-				headerRow.appendChild(th);
-			});
-			table.appendChild(headerRow);
 
-			// Create table rows with buttons
-			data.data.forEach(item => {
-				const row = document.createElement('tr');
-				headers.forEach(header => {
-					const cell = document.createElement('td');
-					if (header === 'Actions') {
-						// Create buttons for delete and change status
-						const Edit = document.createElement('button');
-						deleteButton.textContent = 'Edit';
-						deleteButton.addEventListener('click', () => {
-							OpenPopUp(item);
-						});
-						const deleteButton = document.createElement('button');
-						deleteButton.textContent = 'Delete';
-						deleteButton.addEventListener('click', () => {
-							DeleteMagazine(item.id);
-						});
+	<script src="./public/js/script.js"></script>
 
-						const changeStatusButton = document.createElement('button');
-						changeStatusButton.textContent = item.is_subscribed? 'Unsubscribe':'Subscribe';
-						changeStatusButton.addEventListener('click', () => {
-							UpdateStatusMagazine(item.id);
-						});
-
-						cell.appendChild(deleteButton);
-						cell.appendChild(changeStatusButton);
-					} else {
-						cell.textContent = item[header];
-					}
-					row.appendChild(cell);
-				});
-				table.appendChild(row);
-			});
-
-			return table;
-		}
-
-		// Attach click event listener to the button
-		document.getElementById('fetchMagazineButton').addEventListener('click', fetchMagazines);
-	</script>
 </body>
 
 </html>
